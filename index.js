@@ -18,15 +18,17 @@ const mine = async () => {
   try{
     const coins = Object.keys(dataSet);
 
+
     if(i >= 30) {
       console.log(coins.map(c => `${c}: ${dataSet[c].length}`).join('\t'));
 
       await Promise.all(coins.map(async c =>  
-        await fs.writeFile(`./data/${c}.csv`, dataSet[c].map(tradeToRow).join('\n'))));
+        await fs.writeFile(`./data/${c}.tsv`, dataSet[c].map(tradeToRow).join('\n'))));
 
       return clearInterval(interval);
     }
     
+    console.log(`========${i+1}========`);
     await Promise.all(coins.map(async coin => {
       let coinSet = dataSet[coin];
       let { data } = await axios.get(address(coin));
@@ -46,4 +48,4 @@ const mine = async () => {
 
 mine();
 
-const interval = setInterval(mine, 1000);
+const interval = setInterval(mine, 10000);

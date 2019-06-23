@@ -14,7 +14,7 @@ const parse = async () => {
     const coins = Object.keys(dataSet);
 
     for(let i = 0; i < coins.length; i++){
-      let data = await fs.readFile(`./data/${coins[i]}.csv`);
+      let data = await fs.readFile(`./data/${coins[i]}.tsv`);
       data = data.toString().split('\n')
         .map((t, i, a) => t.split('\t')
           .map(v => v == 'true' ? 1 : v == 'false' ? 0 : +v.replace(',', '.'))
@@ -23,7 +23,6 @@ const parse = async () => {
       let increaseCount = 0;
       for(let i = 1; i < data.length; i++){
         if(data[i][1] > data[i-1][1]){
-          // console.log('f')
           if(increaseCount < 0) increaseCount = 0;
           data[i][7] = ++increaseCount;
         }else if(data[i][1] < data[i-1][1]){
@@ -34,7 +33,7 @@ const parse = async () => {
         }
       }
 
-      await fs.writeFile(`./data/${coins[i]}.csv`, data.map(tradeToRow).join('\n'))
+      await fs.writeFile(`./parsed/${coins[i]}.tsv`, data.map(tradeToRow).join('\n'))
     }
 
 
